@@ -134,8 +134,9 @@ https://templatemo.com/tm-559-zay-shop
                             <div class="col"><h4><b>Shopping Cart</b></h4></div>
                             <div class="col align-self-center text-right text-muted">3 items</div>
                         </div>
-                    </div>    
-                    <div class="row border-top border-bottom">
+                    </div>
+                    <div id="listCart"></div>    
+                    <!-- <div class="row border-top border-bottom">
                         <div class="row main align-items-center">
                             <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
                             <div class="col">
@@ -147,41 +148,15 @@ https://templatemo.com/tm-559-zay-shop
                             </div>
                             <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="row main align-items-center">
-                            <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/ba3tvGm.jpg"></div>
-                            <div class="col">
-                                <div class="row text-muted">Shirt</div>
-                                <div class="row">Cotton T-shirt</div>
-                            </div>
-                            <div class="col">
-                                <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                            </div>
-                            <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                        </div>
-                    </div>
-                    <div class="row border-top border-bottom">
-                        <div class="row main align-items-center">
-                            <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/pHQ3xT3.jpg"></div>
-                            <div class="col">
-                                <div class="row text-muted">Shirt</div>
-                                <div class="row">Cotton T-shirt</div>
-                            </div>
-                            <div class="col">
-                                <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                            </div>
-                            <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                        </div>
-                    </div>
+                    </div> -->
                     <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
                 </div>
                 <div class="col-md-4 summary">
                     <div><h5><b>Summary</b></h5></div>
                     <hr>
                     <div class="row">
-                        <div class="col" style="padding-left:0;">ITEMS 3</div>
-                        <div class="col text-right">&euro; 132.00</div>
+                        <div class="col" style="padding-left:0;">ITEMS <span id="totalitem"></span></div>
+                        <div class="col text-right">&euro; <span id="totalpriceitem"></span></div>
                     </div>
                     <form>
                         <p>SHIPPING</p>
@@ -304,6 +279,58 @@ https://templatemo.com/tm-559-zay-shop
     <script src="assets/js/templatemo.js"></script>
     <script src="assets/js/custom.js"></script>
     <!-- End Script -->
+
+    <script>
+        init()
+        async function init(){
+            let dataCart
+            var listProduct
+            var totalitem=0
+            var totalpriceitem=0
+
+            await fetch('https://fakestoreapi.com/carts/2')
+                .then(res=>res.json())
+                .then((json)=>{
+                    dataCart = json
+                    listProduct = json.products
+                })
+
+            var listCartElement= document.getElementById('listCart')
+            listProduct.forEach(async product => {
+                totalitem = totalitem + product.quantity
+                
+                let detailproduct
+                await fetch(`https://fakestoreapi.com/products/${product.productId}`)
+                .then(res=>res.json())
+                .then(json=>{
+                    detailproduct=json
+                })
+                
+                totalpriceitem = totalpriceitem + (product.quantity * detailproduct.price)
+                
+                let htmlproduct=`
+                    <div class="row border-top border-bottom">
+                        <div class="row main align-items-center">
+                            <div class="col-2"><img class="img-fluid" src="${detailproduct.image}"></div>
+                            <div class="col">
+                                <div class="row text-muted">${detailproduct.category}</div>
+                                <div class="row">${detailproduct.title}</div>
+                            </div>
+                            <div class="col">
+                                <a href="#">-</a><a href="#" class="border">${product.quantity}</a><a href="#">+</a>
+                            </div>
+                            <div class="col">&euro; ${detailproduct.price} <span class="close">&#10005;</span></div>
+                        </div>
+                    </div>
+                `
+
+                listCartElement.insertAdjacentHTML('beforeend', htmlproduct)
+                
+                document.getElementById('totalitem').innerHTML = totalitem
+                document.getElementById('totalpriceitem').innerHTML = totalpriceitem
+            });
+        }
+    </script>
 </body>
 
 </html>
