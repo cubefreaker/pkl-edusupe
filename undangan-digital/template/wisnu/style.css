@@ -1,0 +1,53 @@
+:root{
+    --primary:#2e8b57;
+    --bg:		#f0f8ff;
+}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    border:none;
+    text-decoration:none;
+}
+body{
+    font-family:"Sofia",serif;
+    background-color:var(--bg);
+    color:	#000000;
+}
+.judulwedding{
+    display: flex;
+    justify-content: center;
+    min-height:100vh;
+    align-items: center;
+    background-image: url(gambar/mariage.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    font-size: 38px;
+    font-weight: 100px;
+}
+.judul{
+    padding: 60px 0;
+    text-align: center;
+}
+.judul h1{
+    color:var(--primary);
+}
+.foto{
+    display:flex;
+    justify-content:space-around;
+}
+.foto .foto2{
+    text-align:center;
+    margin: 50px 0 50px 0;
+}
+.tanggal{
+    text-align: center;
+    line-height:2.5;
+    padding-top:50px;
+    padding-bottom:100px;
+}
+.tanggal .date{
+    color:var(--primary);
+    font-weight:bold;
+}
